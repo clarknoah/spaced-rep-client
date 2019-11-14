@@ -1,0 +1,10 @@
+
+.QuestionDisplay {
+  grid-column: 2 / span 1;
+  grid-row: 1 / span 1;
+  border: 1px black solid;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
