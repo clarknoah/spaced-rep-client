@@ -8,39 +8,13 @@ import api from "../../services/api.js";
 
 
 
-class KnowledgeUnits {
-  constructor(units, state){
-    this.state = state;
-    this.unanswered = units;
-    this.correctlyAnswered = [];
-    this.incorrectlyAnswered = [];
-  }
-
-  answeredCorrectly =()=>{
-    let obj = this.unanswered.splice(0, 1);
-    this.correctlyAnswered.push(...obj);
-  }
-}
-
-
-class Question {
-  constructor(){
-
-  }
-}
-
-class Answer {
-  constructor(){
-
-  }
-}
-
 class UnitLearnBlock extends Component{
   constructor(props){
     super();
     console.log(props);
     this.state = {
-      classList: "UnitLearnBlock"
+      classList: "UnitLearnBlock",
+      dataLoaded:false
     };
   }
 
@@ -51,7 +25,7 @@ class UnitLearnBlock extends Component{
       })
       .then(res=>{
         console.log(res)
-        this.injectData(res);
+        this.preparePractice(res);
       })
       .catch(err=>{
         console.log("error",err);
@@ -59,46 +33,17 @@ class UnitLearnBlock extends Component{
       ;
   }
 
-  injectData = (data) =>{
-    console.log(data);
+  preparePractice=(res)=>{
+    console.log(res);
     this.setState({
-      currentQuestion:data[0].properties.question,
-      correctAnswer:data[0].properties.answer,
-      currentUnit:data[0],
-      unanswered:data,
-      correct:[],
-      incorrect:[]
+      dataLoaded:true,
+      questions:res
     })
   }
 
-  answeredCorrectlyFromUnanswered=()=>{
-    //When A question is answered correctly, I need to
-    let
-    let newCurrentQuestion;
-    let newCurrentAnswer;
-    let newCorrectAnswer;
-    let newCurrentUnit;
-    let newUnanswered = [this.];
-    let newCorrect = [this.state[key], ...this.state.correct];
-  //  let newIncorrect = [this.state[key], ...this.state.incorrect];
-
-    this.setState({
-      correct:this.state.,
-      incorrect:,
-      currentUnit:,
-      correctAnswer:,
-      currentQuestion:,
-      currentUnit:,
-
-
-    })
+  onAnswerChange=(answer)=>{
+    console.log(answer);
   }
-
-  answeredIncorrectly=(key)=>{
-
-  }
-
-
 
   componentDidUpdate(){
     console.log("Component Updated");
@@ -107,14 +52,19 @@ class UnitLearnBlock extends Component{
   componentWillUnmount(){}
 
   render(){
-    console.log("Component Rendered");
+    let dataLoaded = (
+        <div className={this.state.classList}>
+            <LearningInfoBlock />
+            <QuestionDisplay
+              question={this.state.questions[0].properties.question}/>
+            <AnswerAttempt
+              onAnswerChange={this.onAnswerChange}/>
+          </div>);
+    let dataNotLoaded = "Data Not Loaded";
     return(
-      <div className={this.state.classList}>
-        <LearningInfoBlock {...this}/>
-        <QuestionDisplay {...this}/>
-        <AnswerAttempt {...this}/>
-
-      </div>
+        <div>
+          {this.state.dataLoaded ? dataLoaded:dataNotLoaded}
+        </div>
     );
   }
 }

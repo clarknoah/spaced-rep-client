@@ -7,7 +7,7 @@ import "./<%= name %>.css";
 
 class <%= name %> extends Component{
   constructor(props){
-    super(props);
+    superprops);
     console.log(props);
     this.state = {
       classList: "<%= name %>"

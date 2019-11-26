@@ -1,10 +1,11 @@
 
 import React, {Component} from 'react';
 import "./AnswerAttempt.css";
+import {withRouter} from "react-router-dom";
 
 class AnswerAttempt extends Component{
   constructor(props){
-    super();
+    super(props);
     console.log(props);
     this.state = {
       classList: "AnswerAttempt",
@@ -21,14 +22,15 @@ class AnswerAttempt extends Component{
 
   componentWillReceiveProps(props) {
     console.log(props);
-  this.setState({ unit: props });
+  this.setState({ parent: props });
 }
 
-  checkAnswer=(answer)=>{
-    console.log(answer.target.value);
+  checkAnswer=(evt)=>{
+    console.log(evt.target.value);
     this.setState({
-      answerAttempt:answer.target.value
+      answerAttempt:evt.target.value
     })
+    this.props.onAnswerChange(evt.target.value);
   }
 
   render(){
@@ -43,4 +45,4 @@ class AnswerAttempt extends Component{
   }
 }
 
-export default AnswerAttempt;
+export default withRouter(AnswerAttempt);
