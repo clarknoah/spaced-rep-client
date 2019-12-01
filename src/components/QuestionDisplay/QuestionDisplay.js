@@ -8,6 +8,7 @@ class QuestionDisplay extends Component{
     console.log(props);
     this.state = {
       classList: "QuestionDisplay",
+      question: props.question
     };
   }
 
@@ -17,17 +18,13 @@ class QuestionDisplay extends Component{
     console.log(props);
   }
 
-  componentWillReceiveProps(props) {
-    console.log(props);
-}
-
   componentWillUnmount(){}
 
   render(){
 
     return(
       <div className={this.state.classList}>
-
+        {this.state.question.properties.question}
       </div>
     );
   }

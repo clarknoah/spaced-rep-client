@@ -9,7 +9,10 @@ class AnswerAttempt extends Component{
     console.log(props);
     this.state = {
       classList: "AnswerAttempt",
-      answerAttempt:""
+      answerAttempt:"",
+      question: props.question,
+      answerLength: props.question.properties.answer.length
+
 
     };
   }
@@ -25,22 +28,36 @@ class AnswerAttempt extends Component{
   this.setState({ parent: props });
 }
 
+  getLastCharacter=(evt)=>{
+    console.log(evt.key);
+  }
+
   checkAnswer=(evt)=>{
-    console.log(evt.target.value);
     this.setState({
       answerAttempt:evt.target.value
+    }, ()=>{
+      if(this.state.answerLength ===  this.state.answerAttempt.length){
+        let answeredCorrectly = this.matchAnswer(this.state.answerAttempt);
+        console.log("Answered Correctly: ", answeredCorrectly);
+        this.props.answerSubmitted(this.state.answerAttempt)
+      }
     })
-    this.props.onAnswerChange(evt.target.value);
+  }
+
+  matchAnswer=(answer)=>{
+    return answer==this.state.question.properties.answer
   }
 
   render(){
     return(
-      <textarea
-        onChange={this.checkAnswer}
-        value={this.state.answerAttempt}
-        className={this.state.classList}>
-
-      </textarea>
+      <div className={this.state.classList}>
+        <textarea
+          onKeyPress={this.getLastCharacter}
+          onChange={this.checkAnswer}
+          value={this.state.answerAttempt}>
+        </textarea>
+        <button>Submit</button>
+      </div>
     );
   }
 }
