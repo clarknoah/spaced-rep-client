@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import "./AnswerAttempt.css";
 import {withRouter} from "react-router-dom";
 
+
+
 class AnswerAttempt extends Component{
   constructor(props){
     super(props);
@@ -45,7 +47,7 @@ class AnswerAttempt extends Component{
   }
 
   matchAnswer=(answer)=>{
-    return answer==this.state.question.properties.answer
+    return answer === this.state.question.properties.answer
   }
 
   render(){

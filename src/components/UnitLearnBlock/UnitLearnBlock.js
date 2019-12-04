@@ -51,6 +51,10 @@ class UnitLearnBlock extends Component{
       classList: "UnitLearnBlock",
       dataLoaded:false,
       questions:[],
+      practiceSessionHasBegun:false,
+      practiceSessionHasEnded:false,
+
+
     };
   }
 
