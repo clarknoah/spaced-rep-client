@@ -12,10 +12,19 @@ class QuestionDisplay extends Component{
     };
   }
 
+  reloadState=(props)=>{
+    this.setState({
+      question: props.question,
+    });
+  }
+
   componentDidMount(){}
 
-  componentDidUpdate(props){
-    console.log(props);
+  componentDidUpdate(){
+    let newQuestionLoaded = this.props.question.counter !== this.state.question.counter;
+    if(newQuestionLoaded){
+      this.reloadState(this.props);
+    }
   }
 
   componentWillUnmount(){}

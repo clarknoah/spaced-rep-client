@@ -5,39 +5,8 @@ import LearningInfoBlock from "../LearningInfoBlock/LearningInfoBlock";
 import AnswerAttempt from "../AnswerAttempt/AnswerAttempt";
 import QuestionDisplay from "../QuestionDisplay/QuestionDisplay";
 import api from "../../services/api.js";
-
-class FlashCards{
-  constructor(){
-  }
-
-  addReact=(react)=>{
-    this.react = react
-  }
-
-  addCards=(cards)=>{
-    this.cards = cards
-  }
-
-  updateState=(update)=>{
-    console.log("Pre Update");
-    this.react.setState(update,()=>{
-      console.log('State Updated');
-    })
-  }
-
-  answeredCorrectly=()=>{
-
-  }
-
-}
-
-let fc = new FlashCards();
-
-let ds = {
-  completedAttempts:[],
-
-  submitAttempts
-}
+import {withRouter} from 'react-router-dom';
+import utils from '../../services/utils.js'
 
 
 
@@ -45,14 +14,16 @@ let ds = {
 class UnitLearnBlock extends Component{
   constructor(props){
     super(props);
-    console.log(props);
-    fc.addReact(this);
     this.state = {
       classList: "UnitLearnBlock",
       dataLoaded:false,
+      currentQuestion:null,
       questions:[],
       practiceSessionHasBegun:false,
       practiceSessionHasEnded:false,
+      submissionPayload:[],
+      counter:0,
+      userTopicId:null
 
 
     };
@@ -61,9 +32,8 @@ class UnitLearnBlock extends Component{
   componentDidMount(){
     api.getUnits()
       .then(res=>{
-        console.log(res)
+        console.log(res.data)
         this.preparePractice(res.data);
-        fc.updateState();
       })
       .catch(err=>{
         console.log("error",err);
@@ -72,42 +42,87 @@ class UnitLearnBlock extends Component{
   }
 
   preparePractice=(res)=>{
-    console.log(res);
+    let mainPayload = res;
+    res = res.questions;
+
+    let currentQuestion = res.shift();
+    currentQuestion.counter = this.state.counter;
     this.setState({
+      userTopicId: res.userTopicId,
       dataLoaded:true,
-      questions:res
+      questions:res,
+      currentQuestion: currentQuestion,
+      unitCount: res.length
     })
   }
 
-  answerSubmitted=(answer)=>{
-    let question = this.state.questions[0];
-    console.log(answer)
+  submitData=()=>{
+    let sessionData = {
+      sessionStartTime:null,
+      sessionEndTime:null,
+      attemptCount: this.state.counter,
+      unitCount:this.state.unitCount
+    }
+    let request = {
+      userTopicId: this.state.userTopicId,
+      attempts: this.state.submissionPayload,
+    };
+    console.log(sessionData, request);
+    let query = `
+    MATCH (userTopic:UserTopic)
+    `
+    console.log(utils.parseTopicSessionPayload(request.attempts));
   }
 
-  /*
- 1. ULB Loads
- 2. ULB Requests the flashcards to be studied
- 3. ULB Receives the flash cards to be studied
- 4. ULB parses and prepares the the data so that
+  answerSubmitted=(answer)=>{
+    console.log(`${answer.kuId} answered correctly: ${answer.answeredCorrectly}`)
+    let submissionPayload = this.state.submissionPayload;
+    submissionPayload.push(answer);
+    let questions = this.state.questions;
+    let currentQuestion = this.state.currentQuestion;
+    let answeredCorrectly = answer.answeredCorrectly;
+    let counter = this.state.counter + 1;
 
-*/
-
+    if(answeredCorrectly && this.state.questions.length > 0){
+      let nextQuestion = questions.shift();
+      nextQuestion.counter = counter;
+      this.setState({
+        questions: questions,
+        currentQuestion: nextQuestion,
+        counter: counter,
+        submissionPayload:submissionPayload
+      })
+    }else if(!answeredCorrectly && this.state.questions.length > 0){
+      questions.push(currentQuestion);
+      let nextQuestion = questions.shift();
+      nextQuestion.counter = counter;
+      this.setState({
+        questions: questions,
+        currentQuestion: nextQuestion,
+        counter: counter,
+        submissionPayload:submissionPayload
+      });
+    }else{
+      console.log("All questions answered!")
+    }
+  }
 
   componentDidUpdate(){
-    console.log("Component Updated");
+
   }
 
   componentWillUnmount(){}
 
   render(){
+
     let dataLoaded = (
         <div className={this.state.classList}>
             <LearningInfoBlock />
             <QuestionDisplay
-              question={this.state.questions[0]}/>
+              question={this.state.currentQuestion}/>
 
             <AnswerAttempt
-              question={this.state.questions[0]}
+              question={this.state.currentQuestion}
               answerSubmitted={this.answerSubmitted}
               />
           </div>);
@@ -115,9 +130,10 @@ class UnitLearnBlock extends Component{
     return(
         <div>
           {this.state.dataLoaded ? dataLoaded:dataNotLoaded}
+          <button onClick={this.submitData}>Submit</button>
         </div>
     );
   }
 }
 
-export default UnitLearnBlock;
+export default withRouter(UnitLearnBlock);

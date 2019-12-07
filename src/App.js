@@ -4,7 +4,7 @@ import './App.css';
 import {Route, Link} from 'react-router-dom';
 import UserHome from './components/UserHome/UserHome.js';
 import UnitLearnBlock from './components/UnitLearnBlock/UnitLearnBlock';
-
+import UserRegistration from './components/UserRegistration/UserRegistration';
 function App() {
   return (
     <div className="App">
@@ -13,8 +13,8 @@ function App() {
 
       </header>
       <main>
-        <Route exact path="/" component={UnitLearnBlock}/>
-
+        <Route exact path="/learningSession" component={UnitLearnBlock}/>
+        <Route exact path="/" component={UserRegistration}/>
       </main>
       <footer></footer>
     </div>

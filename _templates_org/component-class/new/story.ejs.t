@@ -8,7 +8,7 @@ import <%= name %> from './<%= name %>';
 
 
 storiesOf('<%= name %>', module)
-    .add('<%= name %>', () =>{
-      return <<%= name %> />
-    }
-)
+    .add('<%= name %>', () => <<%= name %>
+
+
+    />)
