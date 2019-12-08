@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import {withRouter} from 'react-router-dom';
 import api from "../../services/api.js";
 import utils from "../../services/utils.js"
+import {Link} from 'react-router-dom';
 // Class Based React Component
 
 class UserRegistration extends Component{
@@ -121,6 +122,7 @@ class UserRegistration extends Component{
       variant="outlined" />
 
     <Button onClick={this.submitNewUser} variant="contained">Submit</Button>
+    <p>Already have an account? <Link to="/">Login!</Link></p>
   </form>
 
 </div>

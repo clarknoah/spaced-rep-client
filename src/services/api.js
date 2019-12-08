@@ -4,6 +4,7 @@ const rootUrl = `http://localhost:${port}/`
 const getUnits = rootUrl+`app/subjects/1/topics/602/allUnits`;
 const submitSession = rootUrl+`app/subjects/1/topics/1/submitSession`;
 const createUser = rootUrl+`app/user`
+const loginUser = rootUrl+`app/login`
 const api = {
   getUnits: ()=>{
     return X.get(getUnits)
@@ -21,6 +22,11 @@ const api = {
 
     console.log(payload);
     return X.post(createUser, payload)
+  },
+  loginUser:(payload)=>{
+
+    console.log(payload);
+    return X.post(loginUser, payload)
   }
 
 }

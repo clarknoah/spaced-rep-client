@@ -5,6 +5,8 @@ import {Route, Link} from 'react-router-dom';
 import UserHome from './components/UserHome/UserHome.js';
 import UnitLearnBlock from './components/UnitLearnBlock/UnitLearnBlock';
 import UserRegistration from './components/UserRegistration/UserRegistration';
+import UserLogin from './components/UserLogin/UserLogin';
+
 function App() {
   return (
     <div className="App">
@@ -14,7 +16,9 @@ function App() {
       </header>
       <main>
         <Route exact path="/learningSession" component={UnitLearnBlock}/>
-        <Route exact path="/" component={UserRegistration}/>
+        <Route exact path="/register" component={UserRegistration}/>
+        <Route exact path="/" component={UserLogin}/>
+        <Route exact path="/userHome" component={UserHome}/>
       </main>
       <footer></footer>
     </div>
