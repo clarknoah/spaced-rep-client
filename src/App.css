@@ -17,6 +17,13 @@ body {
   width: 100vw;
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 header{
   background-color: black;
   font-family: arial;
