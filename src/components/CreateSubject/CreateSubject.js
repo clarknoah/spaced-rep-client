@@ -26,9 +26,9 @@ class CreateSubject extends Component {
       createNewCategory: false,
       categories:[],
       selectedCategory:'',
-      title:""
+      title:"",
+      newCategory: false
     };
-    this.getCategories();
   }
 
   // Runs after Component is loaded in the broswer
@@ -40,6 +40,7 @@ class CreateSubject extends Component {
   //const [open, setOpen] = React.useState(false);
 
   handleClickOpen = () => {
+    this.getCategories();
     this.setState({
       open: true
     });
@@ -47,7 +48,8 @@ class CreateSubject extends Component {
 
   handleClose = () => {
     this.setState({
-      open: false
+      open: false,
+      newCategory:false
     });
   };
 
@@ -56,20 +58,40 @@ class CreateSubject extends Component {
 
 
   submitForm=()=>{
+    let createNewCategory = this.state.newCategory;
     let obj = {
       title:this.state.title,
-      categoryId:''
+      category:createNewCategory ? this.state.newCategoryField : this.state.categoryId,
+      new: createNewCategory
     }
+    api.createSubject(obj)
+      .then(results=>{
+        console.log(results);
+        this.handleClose();
+      })
   }
 
 
 
   handleChange = event => {
     let key = event.target.name;
-    console.log(key)
-    this.setState({
-      [key]: event.target.value
-    });
+    let value = event.target.value;
+    if(key==="selectedCategory"){
+      if(value === "createNewCategory"){
+        this.setState({
+          newCategory:true
+        });
+      }else{
+        this.setState({
+          [key]: value,
+          categoryId:event.target.value.id
+        });
+      }
+    }else if(key==="title" || key === "newCategoryField"){
+      this.setState({
+        [key]: value
+      });
+    }
   };
 
   getCategories = () => {
@@ -77,11 +99,11 @@ class CreateSubject extends Component {
       .then(results=>{
         console.log(results);
         let items = results.data.map(val => {
-          return <MenuItem key={val.id} value={val.title}>{val.title}</MenuItem>;
+          return <MenuItem key={val.id} valuekey={val.id} value={val}>{val.title}</MenuItem>;
         });
         items.unshift(
-          <MenuItem value="">
-            <em>None</em>
+          <MenuItem key="yolo" value="createNewCategory">
+            <em>Create a new category</em>
           </MenuItem>
         );
         this.setState({
@@ -92,7 +114,30 @@ class CreateSubject extends Component {
 
   render() {
     let items = this.state.categories;
-
+    let showCategories = !this.state.newCategory;
+    let categories =  <FormControl>
+                  <InputLabel id="demo-simple-select-label">Categories</InputLabel>
+                  <Select
+                  style={{width: "100%"}}
+                    value={this.state.selectedCategory}
+                    name="selectedCategory"
+                    onChange={this.handleChange}
+                    fullWidth={true}
+                  >
+                    {items}
+                  </Select>
+                </FormControl>;
+    let createCategory =  <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Category Name"
+                  name="newCategoryField"
+                  type="text"
+                  onChange={this.handleChange}
+                  fullWidth
+                />
+    let conditionalForm = showCategories ? categories : createCategory;
     return (
       <div>
         <Button
@@ -119,25 +164,13 @@ class CreateSubject extends Component {
               onChange={this.handleChange}
               fullWidth
             />
-            <FormControl>
-              <InputLabel id="demo-simple-select-label">Categories</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={this.state.selectedCategory}
-                name="selectedCategory"
-                onChange={this.handleChange}
-                autoWidth
-              >
-                {items}
-              </Select>
-            </FormControl>
+            {conditionalForm}
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.submitForm} color="primary">
               Create Subject
             </Button>
           </DialogActions>
