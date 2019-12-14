@@ -1,8 +1,9 @@
 
 import React, {Component} from 'react';
 import "./SubjectHome.css";
-
-
+import api from "../../services/api";
+import SubjectHeader from "../SubjectHeader/SubjectHeader";
+import TopicsDisplay from "../TopicsDisplay/TopicsDisplay";
 // Class Based React Component
 class SubjectHome extends Component{
   constructor(props){
@@ -11,8 +12,22 @@ class SubjectHome extends Component{
 
     // Default CSS class to apply to the Component
     this.state = {
-      classList: "SubjectHome"
+      classList: "SubjectHome",
+      dataLoaded: false
     };
+    console.log(this.props);
+    api.getUserSubjectData(this.props.match.params.subject)
+      .then(res=>{
+        console.log(res.data);
+
+        this.setState({
+          dataLoaded: true,
+          subjectId: res.data.subjectId,
+          title: res.data.title,
+          topics: res.data.topics,
+          userSubject: res.data.userSubjct
+        })
+      })
   }
 
 
@@ -28,11 +43,17 @@ class SubjectHome extends Component{
   componentWillUnmount(){}
 
   render(){
+    if(this.state.dataLoaded == false){
+      return <div>Waiting for dataqs</div>
+    }
     return(
-      <div className={this.state.classList}>
-        SubjectHome
-      </div>
-    );
+        <div className={this.state.classList}>
+          <SubjectHeader title={this.state.title} id={this.state.subjectId}/>
+          <TopicsDisplay topics={this.state.topics} subjectId={this.state.subjectId}/>
+        </div>
+      );
+
+
   }
 }
 

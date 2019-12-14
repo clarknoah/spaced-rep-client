@@ -30,9 +30,9 @@ class UnitLearnBlock extends Component{
   }
 
   componentDidMount(){
-    api.getUnits()
+    let {subject, topic} = this.props.match.params;
+    api.getUnits(subject, topic)
       .then(res=>{
-        console.log(res.data)
         this.preparePractice(res.data);
       })
       .catch(err=>{
@@ -115,7 +115,11 @@ class UnitLearnBlock extends Component{
 
   render(){
 
-    let dataLoaded = (
+    if(this.state.dataLoaded === false){
+      return <div>Data waiting to load</div>
+    }
+    return(
+        <div>
         <div className={this.state.classList}>
             <LearningInfoBlock />
             <QuestionDisplay
@@ -125,11 +129,7 @@ class UnitLearnBlock extends Component{
               question={this.state.currentQuestion}
               answerSubmitted={this.answerSubmitted}
               />
-          </div>);
-    let dataNotLoaded = "Data Not Loaded";
-    return(
-        <div>
-          {this.state.dataLoaded ? dataLoaded:dataNotLoaded}
+          </div>
           <button onClick={this.submitData}>Submit</button>
         </div>
     );

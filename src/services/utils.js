@@ -103,7 +103,7 @@ CREATE (session:Session)-[:SESSION_OF]->(node${userTopic})
   getActiveUserObjectMock: () => {
     let user = {
       email:"noahbc08@gmail.com",
-      id:123
+      id:3339
     }
     return user;
 

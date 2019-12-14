@@ -16,7 +16,7 @@ function App() {
 
       </header>
       <main>
-        <Route exact path="/learningSession" component={UnitLearnBlock}/>
+        <Route exact path="/subjects/:subject/topics/:topic/session" component={UnitLearnBlock}/>
         <Route exact path="/register" component={UserRegistration}/>
         <Route exact path="/" component={UserLogin}/>
         <Route exact path="/userHome" component={UserHome}/>

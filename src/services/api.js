@@ -1,19 +1,32 @@
 import X from "axios";
 import utils from './utils';
-const port = `1337`
+const port = `1340`
 const rootUrl = `http://localhost:${port}/`
-const getUnits = rootUrl+`app/subjects/1/topics/602/allUnits`;
+const getUnits = rootUrl+`app/subjects/1/topics/602/session`;
 const submitSession = rootUrl+`app/subjects/1/topics/1/submitSession`;
 const createUser = rootUrl+`app/user`
 const loginUser = rootUrl+`app/login`
 const getCategories = rootUrl+`app/categories`
 const createSubject = rootUrl+`app/subject`
 const getUserHomeData = rootUrl+`app/getUserHomeData`;
+const getUserSubjectData = rootUrl+`app/subjects`;
 
 
 const api = {
-  getUnits: ()=>{
-    return X.get(getUnits)
+  getTopicSessionUrl: (subject, topic)=>{
+    return `${rootUrl}/subjects/${subject}/topics/${topic}/session`
+  },
+  getUnits: (subject, topic)=>{
+
+    let payload = {
+      subject: subject,
+      topic: topic,
+      user: utils.getActiveUserObjectMock()
+    }
+    console.log(this);
+    let path = `${rootUrl}app/subjects/${subject}/topics/${topic}/session`;
+
+    return X.post(path, payload);
   },
   getUnitsDev: ()=>{
     return X.get(getUnits)
@@ -49,6 +62,16 @@ const api = {
       id: 3339
     };
     return X.post(getUserHomeData, payload)
+  },
+  getUserSubjectData:(id)=>{
+    let path = getUserSubjectData+`/${id}/`;
+    console.log(path);
+    let payload = {
+      subjectId: parseInt(id)
+    }
+    payload.user = utils.getActiveUserObjectMock();
+    console.log(payload);
+    return X.post(path, payload)
   }
 
 }
