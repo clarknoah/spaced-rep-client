@@ -10,8 +10,6 @@ import {withRouter} from "react-router-dom";
 class SubjectCard extends Component{
   constructor(props){
     super(props);
-    console.log(props);
-
     // Default CSS class to apply to the Component
 
   }
