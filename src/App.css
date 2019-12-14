@@ -17,6 +17,16 @@ body {
   width: 100vw;
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  padding: 25px;
+  overflow-y: scroll;
+}
+
 header{
   background-color: black;
   font-family: arial;
