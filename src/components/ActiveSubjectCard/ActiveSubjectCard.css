@@ -1,4 +1,5 @@
 
 .ActiveSubjectCard {
-
+  cursor: pointer;
+  text-align: center;
 }

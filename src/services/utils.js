@@ -89,7 +89,22 @@ CREATE (session:Session)-[:SESSION_OF]->(node${userTopic})
   },
   getActiveUserId: () => {
     let user = localStorage.getItem('userId');
-    console.log(user);
+    return user;
+
+  },
+  getActiveUserObject: () => {
+    let user = {
+      email:localStorage.getItem('activeUser'),
+      id:localStorage.getItem('userId')
+    };
+    return user;
+
+  },
+  getActiveUserObjectMock: () => {
+    let user = {
+      email:"noahbc08@gmail.com",
+      id:123
+    }
     return user;
 
   }

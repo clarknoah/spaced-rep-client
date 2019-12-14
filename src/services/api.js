@@ -1,4 +1,5 @@
 import X from "axios";
+import utils from './utils';
 const port = `1337`
 const rootUrl = `http://localhost:${port}/`
 const getUnits = rootUrl+`app/subjects/1/topics/602/allUnits`;
@@ -7,6 +8,9 @@ const createUser = rootUrl+`app/user`
 const loginUser = rootUrl+`app/login`
 const getCategories = rootUrl+`app/categories`
 const createSubject = rootUrl+`app/subject`
+const getUserHomeData = rootUrl+`app/getUserHomeData`;
+
+
 const api = {
   getUnits: ()=>{
     return X.get(getUnits)
@@ -37,6 +41,14 @@ const api = {
 
     console.log(payload);
     return X.post(createSubject, payload)
+  },
+  getUserHomeData:()=>{
+    let payload = {};
+    payload.user = {
+      email:"noahbc08@gmail.com",
+      id: 3339
+    };
+    return X.post(getUserHomeData, payload)
   }
 
 }

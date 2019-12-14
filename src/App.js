@@ -6,12 +6,13 @@ import UserHome from './components/UserHome/UserHome.js';
 import UnitLearnBlock from './components/UnitLearnBlock/UnitLearnBlock';
 import UserRegistration from './components/UserRegistration/UserRegistration';
 import UserLogin from './components/UserLogin/UserLogin';
+import SubjectHome from './components/SubjectHome/SubjectHome';
 
 function App() {
   return (
     <div className="App">
       <header>
-        <h1>Spaced Rep</h1>
+        <Link to="/userHome"><h1>Spaced Rep</h1></Link>
 
       </header>
       <main>
@@ -19,6 +20,7 @@ function App() {
         <Route exact path="/register" component={UserRegistration}/>
         <Route exact path="/" component={UserLogin}/>
         <Route exact path="/userHome" component={UserHome}/>
+        <Route exact path="/subjects/:subject" component={SubjectHome}/>
       </main>
       <footer></footer>
     </div>

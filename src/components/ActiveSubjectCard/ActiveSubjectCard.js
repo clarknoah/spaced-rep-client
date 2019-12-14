@@ -1,5 +1,9 @@
-
 import React, {Component} from 'react';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import api from "../../services/api";
+import {withRouter} from "react-router-dom";
 import "./ActiveSubjectCard.css";
 
 
@@ -15,6 +19,11 @@ class ActiveSubjectCard extends Component{
     };
   }
 
+  handleClick=()=>{
+    this.props.history.push({
+        pathname: `/subjects/${this.props.id}`
+      })
+  }
 
   // Runs after Component is loaded in the broswer
   componentDidMount(){}
@@ -29,11 +38,13 @@ class ActiveSubjectCard extends Component{
 
   render(){
     return(
-      <div className={this.state.classList}>
-        ActiveSubjectCard
-      </div>
+      <Card onClick={this.handleClick} className={this.state.classList}>
+        <CardContent>
+          <h4>{this.props.title}</h4>
+        </CardContent>
+      </Card>
     );
   }
 }
 
-export default ActiveSubjectCard;
+export default withRouter(ActiveSubjectCard);

@@ -14,13 +14,26 @@ class UserHome extends Component{
 
     // Default CSS class to apply to the Component
     this.state = {
-      classList: "UserHome"
+      classList: "UserHome",
+      activeSubjects:{},
+      categories:[],
+      dataLoaded: false
     };
   }
 
 
   // Runs after Component is loaded in the broswer
-  componentDidMount(){}
+  componentDidMount(){
+    api.getUserHomeData()
+      .then(results=>{
+        console.log(results);
+        this.setState({
+          activeSubjects:results.data.userData,
+          categories: results.data.categories,
+          dataLoaded: true
+        })
+      })
+  }
 
 
   // Runs after a component has been updated
@@ -31,16 +44,22 @@ class UserHome extends Component{
   componentWillUnmount(){}
 
   render(){
-    return(
-      <div className={this.state.classList}>
-        <div className={"CreateSubjectBlock"}>
-         <CreateSubject/>
-        </div>
+    if(this.state.dataLoaded == false){
+      return <h1>Data is loading</h1>
+    }else{
+      return(
+        <div className={this.state.classList}>
+          <div className={"CreateSubjectBlock"}>
+           <CreateSubject/>
+          </div>
 
-        <ActiveSubjects/>
-        <AvailableCategories/>
-      </div>
-    );
+          <ActiveSubjects  subjects={this.state.activeSubjects}/>
+          <AvailableCategories categories={this.state.categories}/>
+        </div>
+      );
+    }
+
+
   }
 }
 

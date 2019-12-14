@@ -1,4 +1,5 @@
 
 .SubjectCard {
-
+  cursor: pointer;
+  text-align: center;
 }
